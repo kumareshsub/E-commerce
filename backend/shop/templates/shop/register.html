@@ -1,0 +1,38 @@
+{% extends "shop/base.html" %}
+{% block title %}Register · Bigdots{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-side">
+      <h2>Looks like you are new</h2>
+      <p>Sign up to save your cart, wishlist and delivery address.</p>
+    </div>
+    <form class="auth-form" method="post" action="{% url 'register' %}">
+      {% csrf_token %}
+      {% if error %}<div class="error">{{ error }}</div>{% endif %}
+      <div class="form-row">
+        <label>Username</label>
+        <input name="username" value="{{ form.username }}" required />
+      </div>
+      <div class="form-row">
+        <label>Email</label>
+        <input type="email" name="email" value="{{ form.email }}" required />
+      </div>
+      <div class="form-row">
+        <label>Full name</label>
+        <input name="full_name" value="{{ form.full_name }}" />
+      </div>
+      <div class="form-row">
+        <label>Phone</label>
+        <input name="phone" value="{{ form.phone }}" />
+      </div>
+      <div class="form-row">
+        <label>Password</label>
+        <input type="password" name="password" required />
+      </div>
+      <button class="btn btn-blue" type="submit">Register</button>
+      <p class="switch">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+    </form>
+  </div>
+</div>
+{% endblock %}

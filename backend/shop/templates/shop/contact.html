@@ -1,0 +1,27 @@
+{% extends "shop/base.html" %}
+{% block title %}Contact · Bigdots{% endblock %}
+{% block content %}
+<div class="container section">
+  <h2>Talk to Bigdots</h2>
+  <p class="muted">Call, email or chat with us. We reply during store hours 9am – 8pm IST.</p>
+  <div class="contact-grid">
+    <a class="contact-tile" href="{{ tel_href }}" target="_blank" rel="noreferrer">
+      <span>Call</span>
+      <strong>{{ site.phone }}</strong>
+      <p>Speak to support for orders and returns.</p>
+    </a>
+    <a class="contact-tile" href="{{ mail_href }}" target="_blank" rel="noreferrer">
+      <span>Email</span>
+      <strong>{{ site.email }}</strong>
+      <p>Send product or delivery questions.</p>
+    </a>
+    <a class="contact-tile" href="{{ wa_href }}" target="_blank" rel="noreferrer">
+      <span>WhatsApp chat</span>
+      <strong>+{{ site.whatsapp }}</strong>
+      <p>Chat with the store team.</p>
+    </a>
+  </div>
+  <p class="muted">{{ site.address }}</p>
+  <a class="btn btn-blue" href="{% url 'shop' %}">Continue shopping</a>
+</div>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "shop/base.html" %}
+{% block title %}{{ product.name }} · Bigdots{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="detail">
+    <div>
+      {% if product.trending %}<div class="hot">HOT</div>{% endif %}
+      <img src="{{ product.image }}" alt="{{ product.name }}" />
+    </div>
+    <div>
+      <div class="breadcrumb">
+        <a href="{% url 'home' %}">Home</a> /
+        <a href="{% url 'shop_category' product.category.slug %}">{{ product.category.name }}</a>
+      </div>
+      <div class="brand">{{ product.brand }}</div>
+      <h1>{{ product.name }}</h1>
+      <div class="stars">★ {{ product.rating }} · {{ product.reviews_count }} ratings</div>
+      <div class="meta-pills">
+        {% if product.sku %}<span>SKU {{ product.sku }}</span>{% endif %}
+        {% if product.color %}<span>{{ product.color }}</span>{% endif %}
+        {% if product.size %}<span>Size {{ product.size }}</span>{% endif %}
+        {% if product.gender %}<span>{{ product.gender }}</span>{% endif %}
+      </div>
+      <p class="desc">{{ product.description }}</p>
+      <div class="price-row">
+        <span class="price big">₹{{ product.selling_price|floatformat:0 }}</span>
+        <span class="mrp">₹{{ product.original_price|floatformat:0 }}</span>
+        {% if off %}<span class="off">{{ off }}% off</span>{% endif %}
+      </div>
+      <p class="muted">{% if product.quantity %}{{ product.quantity }} in stock{% else %}Out of stock{% endif %}</p>
+
+      {% if user.is_authenticated %}
+        <div class="buy-box">
+          <form method="post" action="{% url 'cart_add' product.id %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}" />
+            <div class="qty">
+              <button type="button" onclick="var i=this.parentNode.querySelector('input'); i.value=Math.max(1, Number(i.value)-1)">-</button>
+              <input name="quantity" value="1" readonly />
+              <button type="button" onclick="var i=this.parentNode.querySelector('input'); i.value=Math.min(10, Number(i.value)+1)">+</button>
+            </div>
+            <div class="action-row">
+              <button class="btn btn-primary" type="submit" {% if product.quantity < 1 %}disabled{% endif %}>Add to cart</button>
+            </div>
+          </form>
+          <form method="post" action="{% url 'wishlist_toggle' product.id %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}" />
+            <button class="btn btn-blue" type="submit">{% if loved %}Favourited{% else %}Add to favourites{% endif %}</button>
+          </form>
+        </div>
+      {% else %}
+        <a class="btn btn-primary" href="{% url 'login' %}?next={{ request.path }}">Login to buy</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <section class="specs-panel">
+    <h2>Product description</h2>
+    <p>{{ product.description }}</p>
+    <h2>Highlights</h2>
+    {% if product.highlights %}<p class="muted">{{ product.highlights }}</p>{% endif %}
+    {% if features %}
+      <ul class="feature-list">
+        {% for item in features %}<li>{{ item }}</li>{% endfor %}
+      </ul>
+    {% endif %}
+    <h2>Specifications</h2>
+    <table class="specs">
+      <tr><th>SKU</th><td>{{ product.sku }}</td></tr>
+      <tr><th>Brand</th><td>{{ product.brand }}</td></tr>
+      <tr><th>Colour</th><td>{{ product.color|default:"—" }}</td></tr>
+      <tr><th>Size</th><td>{{ product.size|default:"—" }}</td></tr>
+      <tr><th>Dimensions (L × W × H)</th><td>{{ product.length_cm }} × {{ product.width_cm }} × {{ product.height_cm }} cm</td></tr>
+      <tr><th>Weight</th><td>{{ product.weight_g }} g</td></tr>
+      <tr><th>Material</th><td>{{ product.material|default:"—" }}</td></tr>
+      <tr><th>Gender</th><td>{{ product.gender }}</td></tr>
+      <tr><th>Suitable for</th><td>{{ product.suitable_for|default:"—" }}</td></tr>
+      <tr><th>Warranty</th><td>{{ product.warranty_months }} months</td></tr>
+      <tr><th>Country of origin</th><td>{{ product.country_of_origin }}</td></tr>
+      <tr><th>Care</th><td>{{ product.care_instructions|default:"—" }}</td></tr>
+    </table>
+  </section>
+</div>
+{% endblock %}

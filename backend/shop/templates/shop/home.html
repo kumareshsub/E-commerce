@@ -1,0 +1,49 @@
+{% extends "shop/base.html" %}
+{% block title %}Bigdots — Play More, Pay Less{% endblock %}
+{% block content %}
+<div class="container">
+  <section class="hero">
+    <div class="hero-card">
+      <div class="kicker">Sports marketplace</div>
+      <h1>Play more. Pay less. Gear up like the pros.</h1>
+      <p>Running shoes, cricket bats, football boots, home gym and trail kit — shop sports gear on Bigdots.</p>
+      <a class="btn btn-primary" href="{% url 'shop' %}">Shop all sports</a>
+    </div>
+    <div class="promo">
+      <div class="kicker">Deal of the day</div>
+      <h2>Up to 50% off fitness &amp; running</h2>
+      <p>Limited stock from Domyos, Kalenji and Quechua.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="section-head">
+      <h2>Shop by sport</h2>
+      <a href="{% url 'shop' %}">View all</a>
+    </div>
+    <div class="sports-grid">
+      {% for cat in categories %}
+        <a class="sport-tile" href="{% url 'shop_category' cat.slug %}">
+          <img src="{{ cat.image }}" alt="{{ cat.name }}" />
+          <strong>{{ cat.name }}</strong>
+        </a>
+      {% endfor %}
+    </div>
+  </section>
+  <section class="section">
+    <div class="section-head"><h2>Trending now</h2></div>
+    <div class="product-grid">
+      {% for p in trending %}
+        {% include "shop/_card.html" %}
+      {% endfor %}
+    </div>
+  </section>
+  <section class="section">
+    <div class="section-head"><h2>Value deals</h2></div>
+    <div class="product-grid">
+      {% for p in deals %}
+        {% include "shop/_card.html" %}
+      {% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock %}

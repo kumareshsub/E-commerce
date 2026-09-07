@@ -1,0 +1,24 @@
+{% extends "shop/base.html" %}
+{% block title %}My account · Bigdots{% endblock %}
+{% block content %}
+<div class="container cart-layout">
+  <form class="panel" method="post">
+    {% csrf_token %}
+    <h2>My account</h2>
+    <p class="muted">Role: {{ user.role }} · @{{ user.username }}</p>
+    <div class="form-row"><label>Full name</label><input name="full_name" value="{{ user.full_name }}" /></div>
+    <div class="form-row"><label>Phone</label><input name="phone" value="{{ user.phone }}" /></div>
+    <div class="form-row"><label>Address</label><input name="address" value="{{ user.address }}" /></div>
+    <div class="form-row"><label>City</label><input name="city" value="{{ user.city }}" /></div>
+    <div class="form-row"><label>Pincode</label><input name="pincode" value="{{ user.pincode }}" /></div>
+    <button class="btn btn-blue" type="submit">Save profile</button>
+  </form>
+  <aside class="panel">
+    <h3>Shortcuts</h3>
+    <a href="{% url 'orders' %}">My orders</a><br />
+    <a href="{% url 'wishlist' %}">Favourites</a><br />
+    <a href="{% url 'cart' %}">Cart</a><br />
+    <a href="{% url 'contact' %}">Call / Email / Chat</a>
+  </aside>
+</div>
+{% endblock %}

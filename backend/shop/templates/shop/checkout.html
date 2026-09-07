@@ -1,0 +1,69 @@
+{% extends "shop/base.html" %}
+{% block title %}Checkout · Bigdots{% endblock %}
+{% block content %}
+<div class="container cart-layout">
+  <form class="panel" method="post" id="checkout-form">
+    {% csrf_token %}
+    <h2>Delivery address</h2>
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+    <div class="form-row"><label>Address</label><input name="address" value="{{ form.address }}" required /></div>
+    <div class="form-row"><label>City</label><input name="city" value="{{ form.city }}" required /></div>
+    <div class="form-row"><label>Pincode</label><input name="pincode" value="{{ form.pincode }}" required /></div>
+    <div class="form-row"><label>Phone</label><input name="phone" value="{{ form.phone }}" required /></div>
+
+    <h2 style="margin-top:18px">Payment</h2>
+    <div class="pay-options">
+      <label class="pay-card {% if form.payment_method == 'cod' %}on{% endif %}">
+        <input type="radio" name="payment_method" value="cod" {% if form.payment_method == 'cod' %}checked{% endif %} />
+        <strong>Cash on delivery</strong>
+        <span>Pay when the order arrives</span>
+      </label>
+      <label class="pay-card {% if form.payment_method == 'upi' %}on{% endif %}">
+        <input type="radio" name="payment_method" value="upi" {% if form.payment_method == 'upi' %}checked{% endif %} />
+        <strong>UPI</strong>
+        <span>Google Pay, PhonePe, Paytm</span>
+      </label>
+      <label class="pay-card {% if form.payment_method == 'card' %}on{% endif %}">
+        <input type="radio" name="payment_method" value="card" {% if form.payment_method == 'card' %}checked{% endif %} />
+        <strong>Debit / Credit card</strong>
+        <span>Visa, Mastercard, RuPay</span>
+      </label>
+    </div>
+    <div id="upi-fields" {% if form.payment_method != 'upi' %}hidden{% endif %}>
+      <div class="form-row"><label>UPI ID</label><input name="upi_id" value="{{ form.upi_id }}" placeholder="name@oksbi" /></div>
+    </div>
+    <div id="card-fields" {% if form.payment_method != 'card' %}hidden{% endif %}>
+      <div class="form-row"><label>Card number</label><input name="card_number" value="{{ form.card_number }}" placeholder="XXXX XXXX XXXX 4242" /></div>
+      <div class="pay-split">
+        <div class="form-row"><label>Expiry</label><input name="card_expiry" value="{{ form.card_expiry }}" placeholder="MM/YY" /></div>
+        <div class="form-row"><label>CVV</label><input name="card_cvv" value="{{ form.card_cvv }}" placeholder="123" /></div>
+      </div>
+    </div>
+    <button class="btn btn-primary" type="submit" name="place" value="1">
+      {% if form.payment_method == 'cod' %}Place order · ₹{{ payable|floatformat:0 }}{% else %}Pay ₹{{ payable|floatformat:0 }}{% endif %}
+    </button>
+  </form>
+  <aside class="panel">
+    <h3>Order summary</h3>
+    {% for item in items %}
+      <div class="summary-row">
+        <span>{{ item.product.name }} × {{ item.quantity }}</span>
+        <span>₹{% widthratio item.product.selling_price 1 item.quantity %}</span>
+      </div>
+    {% endfor %}
+    <div class="summary-row"><span>Delivery</span><span>{% if delivery %}₹{{ delivery }}{% else %}FREE{% endif %}</span></div>
+    <div class="summary-row total"><span>To pay</span><span>₹{{ payable|floatformat:0 }}</span></div>
+  </aside>
+</div>
+<script>
+document.querySelectorAll('input[name="payment_method"]').forEach(function (el) {
+  el.addEventListener("change", function () {
+    document.getElementById("upi-fields").hidden = this.value !== "upi";
+    document.getElementById("card-fields").hidden = this.value !== "card";
+    document.querySelectorAll(".pay-card").forEach(function (card) {
+      card.classList.toggle("on", card.querySelector("input").checked);
+    });
+  });
+});
+</script>
+{% endblock %}

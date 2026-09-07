@@ -1,0 +1,21 @@
+{% extends "shop/base.html" %}
+{% block title %}Favourites · Bigdots{% endblock %}
+{% block content %}
+<div class="container section">
+  <h2>Favourites</h2>
+  {% if items %}
+    <div class="product-grid" style="margin-top:16px">
+      {% for item in items %}
+        {% with p=item.product %}
+          {% include "shop/_card.html" %}
+        {% endwith %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty">
+      <h2>No favourites yet</h2>
+      <a class="btn btn-blue" href="{% url 'shop' %}">Browse products</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

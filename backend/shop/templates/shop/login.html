@@ -1,0 +1,31 @@
+{% extends "shop/base.html" %}
+{% block title %}Login · Bigdots{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-side">
+      <h2>Login</h2>
+      <p>Get access to your orders, wishlist and sports recommendations.</p>
+    </div>
+    <form class="auth-form" method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+      {% if next %}<input type="hidden" name="next" value="{{ next }}" />{% endif %}
+      {% if error %}<div class="error">{{ error }}</div>{% endif %}
+      <div class="form-row">
+        <label for="id_username">Username</label>
+        <input id="id_username" name="username" value="{{ username }}" required autofocus />
+      </div>
+      <div class="form-row">
+        <label for="id_password">Password</label>
+        <input id="id_password" type="password" name="password" required />
+      </div>
+      <button class="btn btn-blue" type="submit">Login</button>
+      <p class="switch">New here? <a href="{% url 'register' %}">Create an account</a></p>
+      <div class="hint">
+        <strong>Customer login</strong><br />
+        Username: <code>demo</code> · Password: <code>Demo@123</code>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
