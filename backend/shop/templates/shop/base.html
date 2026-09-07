@@ -5,6 +5,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{% block title %}Bigdots{% endblock %}</title>
+  <meta name="description" content="Bigdots is a full-stack sports e-commerce store with Django REST, React, JWT auth, and role-based admin." />
+  <link rel="icon" type="image/png" href="{% static 'shop/favicon.png' %}" />
+  <link rel="apple-touch-icon" href="{% static 'shop/logo.png' %}" />
   <link rel="stylesheet" href="{% static 'shop/web.css' %}" />
 </head>
 <body>
@@ -28,7 +31,10 @@
   </div>
   <header class="header">
     <div class="container header-row">
-      <a class="logo" href="{% url 'home' %}">Big<span>dots</span></a>
+      <a class="logo" href="{% url 'home' %}">
+        <img src="{% static 'shop/logo.png' %}" alt="" width="36" height="36" />
+        Big<span>dots</span>
+      </a>
       <form class="search" action="{% url 'shop' %}" method="get">
         <input name="q" value="{{ q|default:'' }}" placeholder="Search for shoes, bats, cycles, dumbbells and more" style="border: none; outline: none; max-width: 200px; background-color: transparent;" />
         <button type="submit" title="Search" aria-label="Search">

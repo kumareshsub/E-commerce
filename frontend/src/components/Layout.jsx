@@ -36,6 +36,7 @@ export default function Navbar() {
       <header className="header">
         <div className="container header-row">
           <Link to="/" className="logo">
+            <img src="/logo.png" alt="" width="36" height="36" />
             Big<span>dots</span>
           </Link>
           <form className="search" onSubmit={search}>
